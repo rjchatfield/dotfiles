@@ -1,0 +1,135 @@
+#!/bin/bash
+
+# Pass in the username@server
+ssh_copy_id()
+{
+	cat ~/.ssh/id_rsa.pub | ssh "$@" 'cat >> ~/.ssh/authorized_keys' ;
+}
+
+# PASS Sessions
+geektool_group_visibility()
+{
+	osascript << EOD
+	tell application "Geektool Helper" to set visible of group "$1" to $2
+EOD
+	echo GeekTool group \'$1\' visibility: $2;
+}
+PASS_START()
+{
+	echo; echo 'Launching into PASS.'; echo;
+
+	# CLOSE DISTRACTIONS
+	# Not sure how to turn on Do Not Disturb
+	quit -s Messages Spotify VLC; # https://www.macupdate.com/app/mac/31821/quit
+
+	# DESKTOP
+	hidedesktop;
+	geektool_group_visibility "My Name" true;
+
+	# LAUNCH
+	subl --project ~/Google\ Drive/01\ University/01\ My\ Course\ Content/2014_S01/1001ICT_PASS/In-Class/PASS_1001ICT.sublime-project;
+	open ~/Desktop/JPLIDE;
+
+	# NOTIFY
+	osascript -e 'display notification "Now ready! Lets get started." with title "PASS 1001ICT"'
+	exit 0;
+}
+PASS_FINISH()
+{
+	# DESKTOP
+	showdesktop;
+	geektool_group_visibility "My Name" false;
+
+	# QUIT
+	quit "Sublime Text"; # https://www.macupdate.com/app/mac/31821/quit
+	kill $(ps -A | grep 'JPLIDE$' | awk '{print $1}'); # kill JPL
+
+	# NOTIFY
+	# echo; echo 'Well done on another great PASS.'; echo;
+	osascript -e 'display notification "Well done on another great PASS!" with title "PASS 1001ICT"'
+	exit 0;
+}
+
+# Get OS X Software Updates, and update installed Ruby gems, Homebrew, npm, and their installed packages
+update()
+{
+	echo
+	echo -- UPDATE: OS X Software --
+		sudo softwareupdate -i -a
+	echo
+	echo -- UPDATE: Homebrew --
+		brew update
+		brew upgrade
+		brew cleanup
+	echo
+	echo -- UPDATE: NPM --
+		npm update npm -g
+		npm update -g
+	echo
+	echo -- UPDATE: Gems --
+		sudo gem update --system
+		sudo gem update
+}
+
+# Speed up the key repeat and key repeat delay.
+keyRepeatRate()
+{
+	echo
+
+	echo "Resetting key repeat settings to default"
+	echo
+	defaults delete NSGlobalDomain KeyRepeat
+	defaults delete NSGlobalDomain InitialKeyRepeat
+
+	if [ -n "$1" ]
+	then
+		echo
+		echo "Set a blazingly fast keyboard repeat rate, "
+		defaults write NSGlobalDomain KeyRepeat -int 1.8
+
+		echo "Set a shorter Delay until key repeat"
+		defaults write NSGlobalDomain InitialKeyRepeat -int 20
+	fi
+
+	echo
+}
+
+# Count the number of lines of code
+lineCount()
+{
+    echo
+    echo "  CODE LINE COUNTER"
+    echo
+    file_types=(h m hpp cpp java html js css scss py rb php sql)
+    integer total=0
+    for f in $file_types; do
+        # Do a line count (ignore error messages),
+        #  | get the last line of output,
+        #  | and get the first element of that line
+        lc=$( ( wc -l **/*.${f} ) 2> /dev/null | tail -1 | awk '{print $1;}' )
+
+        # If there is a value for lc
+        #   (which means there were files of that type)
+        #   print to screen
+        if [[ -n $lc ]]; then
+            printf '%7s %5d lines\n' '.'${f} $lc
+            total+=$lc
+        fi
+    done
+    echo '-------------------'
+    printf '%7s %5d lines\n' 'total' $total
+    echo '==================='
+    echo
+}
+alias lc='lineCount'
+
+source_hidden_dotfiles()
+{
+    # check file exists, is regular file and is readable:
+    if [[ -f "$1" && -r "$1" ]]; then
+        source "$1"
+    fi
+}
+
+# SOURCE HIDDEN VERSION
+source_hidden_dotfiles "$HOME/.dotfiles/hidden/functions"

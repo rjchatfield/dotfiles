@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='nano'
+else
+  export EDITOR='subl'
+fi
+
+# ZSH
+export LANG=en_UK.UTF-8
+export SSH_KEY_PATH="~/.ssh/rsa_id"
+
+# Nicer history
+export HISTSIZE=100000
+export HISTFILE="$HOME/.history"
+export SAVEHIST=$HISTSIZE
+
+# SOURCE HIDDEN VERSION
+source_hidden_dotfiles "$HOME/.dotfiles/hidden/exports"
