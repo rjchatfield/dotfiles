@@ -125,11 +125,12 @@ alias lc='lineCount'
 
 source_hidden_dotfiles()
 {
+    f="$HOME/.dotfiles/dotfiles_hidden/$1"
     # check file exists, is regular file and is readable:
-    if [[ -f "$1" && -r "$1" ]]; then
-        source "$1"
+    if [[ -f $f && -r $f ]]; then
+        source $f
     fi
 }
 
 # SOURCE HIDDEN VERSION
-source_hidden_dotfiles "$HOME/.dotfiles/hidden/functions"
+source_hidden_dotfiles "functions"

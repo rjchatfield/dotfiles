@@ -57,4 +57,4 @@ alias yolo='sudo'
 alias please='sudo'
 
 # SOURCE HIDDEN VERSION
-source_hidden_dotfiles "$HOME/.dotfiles/hidden/aliases"
+source_hidden_dotfiles "aliases"

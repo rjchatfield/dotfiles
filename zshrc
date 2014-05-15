@@ -38,4 +38,4 @@ source ~/.dotfiles/aliases
 source /usr/local/bin/z.sh
 
 # SOURCE HIDDEN VERSION
-source_hidden_dotfiles "$HOME/.dotfiles/hidden/zshrc"
+source_hidden_dotfiles "zshrc"

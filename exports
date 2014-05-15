@@ -21,4 +21,4 @@ export SAVEHIST=$HISTSIZE
 export LESSEDIT='subl %f'
 
 # SOURCE HIDDEN VERSION
-source_hidden_dotfiles "$HOME/.dotfiles/hidden/exports"
+source_hidden_dotfiles "exports"
