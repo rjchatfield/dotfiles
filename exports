@@ -15,5 +15,9 @@ export HISTSIZE=100000
 export HISTFILE="$HOME/.history"
 export SAVEHIST=$HISTSIZE
 
+# If you press v during viewing file with less utility, it'll open an editor.
+# You can choose the editor by setting LESSEDIT variable. For example:
+export LESSEDIT='subl %f'
+
 # SOURCE HIDDEN VERSION
 source_hidden_dotfiles "$HOME/.dotfiles/hidden/exports"
